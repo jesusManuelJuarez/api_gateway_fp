@@ -1,0 +1,100 @@
+http:
+  port: 8080
+admin:
+  port: 9876
+  host: localhost
+apiEndpoints:
+  fpEndpoints:
+    host: localhost
+    paths: 
+      - "/plan"
+      - "/resource"
+      - "/service"
+      - "/plan/:id"
+      - "/resource/:id"
+      - "/service/:id"
+  sourceEndpoints:
+    host: localhost
+    paths: 
+      - "/image"
+      - "/sourcepyme"
+      - "/sourceuser"
+      - "/image/:id"
+      - "/sourcepyme/:id"
+      - "/sourceuser/:id"
+  userEndpoints:
+    host: localhost
+    paths: 
+      - "/user"
+      - "/login"
+      - "/user/:id"
+      - "/login/:id"
+  registerEndpoints:
+    host: localhost
+    paths: 
+      - "/data"
+      - "/fiscal"
+      - "/address"
+      - "/data/:id"
+      - "/fiscal/:id"
+      - "/address/:id"
+serviceEndpoints:
+  finderpymesService:
+    url: 'http://44.217.26.50:80'
+  sourceService:
+    url: 'http://44.217.24.5:80'
+  userService:
+    url: 'http://50.16.168.171:80'
+  registerService:
+    url: 'http://100.26.119.183:80'
+    
+policies:
+  - basic-auth
+  - cors
+  - expression
+  - key-auth
+  - log
+  - oauth2
+  - proxy
+  - rate-limit
+pipelines: 
+  finderpymesPipeline:
+    apiEndpoints:
+      - fpEndpoints
+    policies:
+      # Uncomment `key-auth:` when instructed to in the Getting Started guide.
+      # - key-auth:
+      - proxy:
+        - action:
+            serviceEndpoint: finderpymesService
+            changeOrigin: true
+  sourcePipeline:
+    apiEndpoints:
+      - sourceEndpoints
+    policies:
+      # Uncomment `key-auth:` when instructed to in the Getting Started guide.
+      # - key-auth:
+      - proxy:
+        - action:
+            serviceEndpoint: sourceService
+            changeOrigin: true
+  userPipeline:
+    apiEndpoints:
+      - userEndpoints
+    policies:
+      # Uncomment `key-auth:` when instructed to in the Getting Started guide.
+      # - key-auth:
+      - proxy:
+        - action:
+            serviceEndpoint: userService
+            changeOrigin: true  
+  registerPipeline:
+    apiEndpoints:
+      - registerEndpoints
+    policies:
+      # Uncomment `key-auth:` when instructed to in the Getting Started guide.
+      # - key-auth:
+      - proxy:
+        - action:
+            serviceEndpoint: registerService
+            changeOrigin: true
